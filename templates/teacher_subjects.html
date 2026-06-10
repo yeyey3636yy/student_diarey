@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Выбор предмета{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">
+    <i class="fas fa-chalkboard-teacher"></i> Выберите предмет для просмотра
+</h2>
+
+<div class="row">
+    {% for subject in subjects %}
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-book fa-3x mb-3" style="color: #3b82f6;"></i>
+                <h4>{{ subject }}</h4>
+                <p class="text-muted">Просмотр всех оценок по предмету</p>
+                <a href="/teacher_view/{{ subject }}" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> Смотреть оценки
+                </a>
+                {% if current_user.subject == subject %}
+                <p class="small text-success mt-2">
+                    <i class="fas fa-check-circle"></i> Вы можете добавлять оценки по этому предмету
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mt-3">
+    <a href="/dashboard" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Назад
+    </a>
+</div>
+{% endblock %}

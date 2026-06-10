@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Аналитика{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Аналитика успеваемости</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Статистика по предметам</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr><th>Предмет</th><th>Средний балл</th><th>Оценок</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for subject in subjects_stats %}
+                        <tr>
+                            <td>{{ subject.name }}</td>
+                            <td>{{ subject.avg }}</td>
+                            <td>{{ subject.count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Лучшие студенты</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr><th>Студент</th><th>Группа</th><th>Средний балл</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for student in top_students %}
+                        <tr>
+                            <td>{{ student.full_name }}</td>
+                            <td>{{ student.group }}</td>
+                            <td>{{ "%.2f"|format(student.avg_grade) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Расписание {{ subject }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-calendar-alt"></i> Расписание уроков: {{ subject }}</h2>
+    <div class="btn-group">
+        <a href="?week={{ week_num - 1 }}" class="btn btn-outline-primary">◀ Предыдущая</a>
+        <a href="?week={{ current_week }}" class="btn btn-primary">Текущая</a>
+        <a href="?week={{ week_num + 1 }}" class="btn btn-outline-primary">Следующая ▶</a>
+    </div>
+</div>
+
+<div class="alert alert-info">Неделя {{ week_num }} • {{ week_range }}</div>
+<p class="text-muted">Преподаватель: {{ teacher_name }}</p>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Время</th>
+                        <th>Пн<br>{{ dates[0] }}</th>
+                        <th>Вт<br>{{ dates[1] }}</th>
+                        <th>Ср<br>{{ dates[2] }}</th>
+                        <th>Чт<br>{{ dates[3] }}</th>
+                        <th>Пт<br>{{ dates[4] }}</th>
+                        <th>Сб<br>{{ dates[5] }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lesson_num in range(1, 5) %}
+                    <tr>
+                        <td class="bg-light">
+                            {% if lesson_num == 1 %}08:30-09:15
+                            {% elif lesson_num == 2 %}09:25-10:10
+                            {% elif lesson_num == 3 %}10:20-11:05
+                            {% else %}11:15-12:00{% endif %}
+                        </td>
+                        {% for day in range(6) %}
+                        <td>
+                            {% set lesson = lessons_by_day.get(day, {}).get(lesson_num) %}
+                            {% if lesson %}
+                                <strong>{{ lesson.subject }}</strong><br>
+                                <small>{{ lesson.teacher }}</small><br>
+                                <small class="text-muted">{{ lesson.classroom }}</small><br>
+                                <span class="badge bg-info">{{ lesson.group }}</span>
+                            {% else %}—{% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

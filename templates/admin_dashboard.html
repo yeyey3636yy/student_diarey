@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-shield-alt"></i> Админ-панель</h2>
+
+<div class="row">
+    <!-- Добавление студента -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-user-plus"></i> Добавить студента
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/admin/add_student">
+                    <div class="mb-2">
+                        <input type="text" name="full_name" class="form-control" placeholder="ФИО" required>
+                    </div>
+                    <div class="mb-2">
+                        <select name="group" class="form-select" required>
+                            <option value="">Выберите группу</option>
+                            {% for g in groups %}
+                            <option value="{{ g }}">{{ g }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="username" class="form-control" placeholder="Логин" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="password" class="form-control" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Добавить студента</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Добавление учителя -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-chalkboard-teacher"></i> Добавить учителя
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/admin/add_teacher">
+                    <div class="mb-2">
+                        <input type="text" name="full_name" class="form-control" placeholder="ФИО" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="subject" class="form-control" placeholder="Предмет" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="username" class="form-control" placeholder="Логин" required>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="password" class="form-control" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Добавить учителя</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Список студентов -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <i class="fas fa-users"></i> Студенты ({{ students|length }})
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Группа</th>
+                                <th>Логин</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.full_name }}</td>
+                                <td>{{ student.group }}</td>
+                                <td>{{ student.username }}</td>
+                                <td>
+                                    <a href="/admin/delete_user/{{ student.user_id }}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?')">×</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="/admin_students" class="btn btn-outline-primary w-100">Все студенты →</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Список учителей -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <i class="fas fa-chalkboard"></i> Учителя ({{ teachers|length }})
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ФИО</th>
+                                <th>Предмет</th>
+                                <th>Логин</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in teachers %}
+                            <tr>
+                                <td>{{ teacher.full_name }}</td>
+                                <td>{{ teacher.subject or '-' }}</td>
+                                <td>{{ teacher.username }}</td>
+                                <td>
+                                    <a href="/admin/delete_user/{{ teacher.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Удалить?')">×</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

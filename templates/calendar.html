@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Календарь уроков{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2><i class="fas fa-calendar-alt"></i> Расписание уроков</h2>
+    <p class="text-muted">Группа: {{ group }}</p>
+</div>
+
+<!-- Выбор месяца и года -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" action="/calendar" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Год</label>
+                <select name="year" class="form-select">
+                    {% for y in years %}
+                    <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Месяц</label>
+                <select name="month" class="form-select">
+                    {% for m_num, m_name in months %}
+                    <option value="{{ m_num }}" {% if m_num == current_month %}selected{% endif %}>{{ m_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search"></i> Показать
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Календарь -->
+<div class="card">
+    <div class="card-header bg-white text-center">
+        <h4>{{ calendar.month_name }} {{ calendar.year }}</h4>
+    </div>
+    <div class="card-body p-0">
+        <div class="calendar-grid">
+            <div class="calendar-weekdays">
+                <div>ПН</div><div>ВТ</div><div>СР</div><div>ЧТ</div><div>ПТ</div><div>СБ</div><div>ВС</div>
+            </div>
+            <div class="calendar-days">
+                {% for week in calendar.weeks %}
+                    {% for day in week %}
+                        {% if day.day %}
+                            <div class="calendar-day {% if day.lessons %}has-lessons{% endif %}">
+                                <div class="day-number">{{ day.day }}</div>
+                                <div class="day-lessons">
+                                    {% for lesson in day.lessons %}
+                                        <div class="lesson-item">
+                                            <div class="lesson-time">{{ lesson.lesson_number }} урок</div>
+                                            <div class="lesson-subject">{{ lesson.subject }}</div>
+                                            <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                                            <div class="lesson-room">{{ lesson.classroom }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="calendar-day empty"></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .calendar-grid {
+        width: 100%;
+    }
+    
+    .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        background: #f1f5f9;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .calendar-weekdays div {
+        padding: 12px;
+        text-align: center;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    
+    .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+    }
+    
+    .calendar-day {
+        min-height: 150px;
+        border: 1px solid #e2e8f0;
+        padding: 8px;
+        vertical-align: top;
+        background: white;
+    }
+    
+    .calendar-day.empty {
+        background: #f8fafc;
+    }
+    
+    .calendar-day.has-lessons {
+        background: #fefce8;
+    }
+    
+    .day-number {
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #3b82f6;
+    }
+    
+    .day-lessons {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .lesson-item {
+        background: #f1f5f9;
+        border-radius: 8px;
+        padding: 6px;
+        font-size: 11px;
+    }
+    
+    .lesson-time {
+        font-weight: 700;
+        color: #f59e0b;
+        font-size: 9px;
+    }
+    
+    .lesson-subject {
+        font-weight: 700;
+        color: #1e293b;
+    }
+    
+    .lesson-teacher {
+        color: #64748b;
+        font-size: 9px;
+    }
+    
+    .lesson-room {
+        color: #3b82f6;
+        font-size: 9px;
+    }
+    
+    @media (max-width: 1200px) {
+        .calendar-day {
+            min-height: 180px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .calendar-day {
+            min-height: 200px;
+            padding: 4px;
+        }
+        .day-number {
+            font-size: 12px;
+        }
+        .lesson-item {
+            font-size: 9px;
+        }
+    }
+</style>
+{% endblock %}

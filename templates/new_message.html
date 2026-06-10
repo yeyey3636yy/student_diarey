@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Новое сообщение{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-pen"></i> Новое сообщение</h2>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-envelope"></i> Отправить сообщение
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/messages/new">
+                    <div class="mb-3">
+                        <label class="form-label">Кому</label>
+                        <select name="receiver_id" class="form-select" required>
+                            <option value="">-- Выберите получателя --</option>
+                            {% for recipient in recipients %}
+                            <option value="{{ recipient.id }}">
+                                {% if recipient.role == 'teacher' %}👨‍🏫{% else %}👨‍🎓{% endif %}
+                                {{ recipient.full_name }}
+                                {% if recipient.role == 'teacher' %}
+                                    ({{ recipient.subject }})
+                                {% else %}
+                                    ({{ recipient.group }})
+                                {% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Тема</label>
+                        <input type="text" name="subject" class="form-control" placeholder="Тема сообщения" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Сообщение</label>
+                        <textarea name="message" class="form-control" rows="6" placeholder="Введите ваше сообщение..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Отправить</button>
+                    <a href="/messages" class="btn btn-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

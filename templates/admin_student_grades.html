@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Оценки {{ student.full_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-user-graduate"></i> {{ student.full_name }} ({{ student.group }})</h2>
+    <a href="/admin_students" class="btn btn-secondary">← Назад</a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">Все оценки</div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Предмет</th>
+                        <th>Оценка</th>
+                        <th>Четверть</th>
+                        <th>Дата</th>
+                        <th>Учитель</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                    <tr>
+                        <td>{{ grade.subject }}</td>
+                        <td>
+                            {% if grade.grade == -1 %}Н
+                            {% elif grade.grade == -2 %}П
+                            {% elif grade.grade == -3 %}Б
+                            {% else %}{{ grade.grade }}{% endif %}
+                        </td>
+                        <td>{{ grade.quarter }}</td>
+                        <td>{{ grade.date }}</td>
+                        <td>{{ grade.teacher_name or '-' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">Нет оценок</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

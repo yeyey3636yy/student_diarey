@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Мои оценки{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-star"></i> Мои оценки</h2>
+<p class="text-muted">{{ student.full_name }} • {{ student.group }}</p>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="grades-table">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Предмет</th>
+                        <th colspan="2">Оценки</th>
+                        <th colspan="2">Средний балл</th>
+                    </tr>
+                    <tr class="table-light">
+                        <th></th>
+                        <th>1 четверть</th>
+                        <th>2 четверть</th>
+                        <th>1 четв</th>
+                        <th>2 четв</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in grades_table %}
+                    <tr>
+                        <td class="subject-cell">{{ row.subject }}</td>
+                        <td class="grades-cell">{{ row.q1_grades }}</td>
+                        <td class="grades-cell">{{ row.q2_grades }}</td>
+                        <td class="avg-cell">{{ row.q1_avg }}</td>
+                        <td class="avg-cell">{{ row.q2_avg }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">Нет оценок</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .grades-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .grades-table th {
+        padding: 12px;
+        text-align: center;
+    }
+    .grades-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: middle;
+    }
+    .subject-cell {
+        font-weight: 600;
+        background: #f8fafc;
+        width: 180px;
+    }
+    .grades-cell {
+        color: #10b981;
+        font-weight: 500;
+        letter-spacing: 2px;
+    }
+    .avg-cell {
+        font-weight: 700;
+        color: #3b82f6;
+        text-align: center;
+        width: 80px;
+    }
+</style>
+{% endblock %}

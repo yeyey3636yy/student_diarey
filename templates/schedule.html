@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Расписание уроков{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h2><i class="fas fa-calendar-alt"></i> Расписание уроков</h2>
+    <div class="btn-group">
+        <a href="?week={{ week_num - 1 }}" class="btn btn-outline-primary">
+            <i class="fas fa-chevron-left"></i> Предыдущая
+        </a>
+        <a href="?week={{ current_week }}" class="btn btn-primary">
+            Текущая
+        </a>
+        <a href="?week={{ week_num + 1 }}" class="btn btn-outline-primary">
+            Следующая <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> Неделя {{ week_num }} • {{ week_range }}
+</div>
+
+<p class="text-muted">Группа: {{ group }} • Ученик: {{ student_name }}</p>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="schedule-calendar">
+                <thead>
+                    <tr class="calendar-header">
+                        <th class="time-col">Время</th>
+                        <th>Понедельник<br><small class="date-small">{{ dates[0] }}</small></th>
+                        <th>Вторник<br><small class="date-small">{{ dates[1] }}</small></th>
+                        <th>Среда<br><small class="date-small">{{ dates[2] }}</small></th>
+                        <th>Четверг<br><small class="date-small">{{ dates[3] }}</small></th>
+                        <th>Пятница<br><small class="date-small">{{ dates[4] }}</small></th>
+                        <th>Суббота<br><small class="date-small">{{ dates[5] }}</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lesson_num in range(1, 5) %}
+                    <tr>
+                        <td class="time-cell">
+                            {% if lesson_num == 1 %}08:30 - 09:15
+                            {% elif lesson_num == 2 %}09:25 - 10:10
+                            {% elif lesson_num == 3 %}10:20 - 11:05
+                            {% elif lesson_num == 4 %}11:15 - 12:00
+                            {% endif %}
+                        </td>
+                        {% for day in range(6) %}
+                        <td class="lesson-cell">
+                            {% set lesson = lessons_by_day.get(day, {}).get(lesson_num) %}
+                            {% if lesson %}
+                                <div class="lesson-subject">{{ lesson.subject }}</div>
+                                <div class="lesson-teacher">{{ lesson.teacher }}</div>
+                                <div class="lesson-room"><i class="fas fa-door-open"></i> {{ lesson.classroom }}</div>
+                            {% else %}
+                                <div class="lesson-placeholder">—</div>
+                            {% endif %}
+                        </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .schedule-calendar {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    .calendar-header th {
+        background: #2c3e50;
+        color: white;
+        padding: 12px 10px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+        border: 1px solid #34495e;
+    }
+    
+    .date-small {
+        font-size: 10px;
+        font-weight: normal;
+        opacity: 0.8;
+    }
+    
+    .time-col {
+        width: 100px;
+    }
+    
+    .time-cell {
+        background: #ecf0f1;
+        color: #2c3e50;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 12px;
+        border: 1px solid #ddd;
+    }
+    
+    .lesson-cell {
+        padding: 8px;
+        vertical-align: top;
+        border: 1px solid #e2e8f0;
+        background: white;
+        min-width: 140px;
+    }
+    
+    .lesson-subject {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .lesson-teacher {
+        color: #3b82f6;
+        font-size: 10px;
+        margin-bottom: 2px;
+    }
+    
+    .lesson-room {
+        color: #64748b;
+        font-size: 10px;
+    }
+    
+    .lesson-placeholder {
+        color: #cbd5e1;
+        text-align: center;
+        font-size: 14px;
+        padding: 10px 0;
+    }
+    
+    .lesson-row:hover td {
+        background: #f8fafc;
+    }
+    
+    @media (max-width: 768px) {
+        .lesson-subject {
+            font-size: 11px;
+        }
+        .lesson-teacher, .lesson-room {
+            font-size: 9px;
+        }
+        .time-cell {
+            font-size: 9px;
+            padding: 6px;
+        }
+        .calendar-header th {
+            font-size: 10px;
+            padding: 6px;
+        }
+        .lesson-cell {
+            padding: 6px;
+            min-width: 110px;
+        }
+    }
+</style>
+{% endblock %}

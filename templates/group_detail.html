@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Группа {{ group_name }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">
+    <i class="fas fa-users"></i> Группа {{ group_name }}
+    <small class="text-muted fs-6">{{ students|length }} студентов</small>
+</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">{{ students|length }}</div>
+            <div class="stat-label">Студентов</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">{{ avg_group }}</div>
+            <div class="stat-label">Средний балл</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-number">{{ subjects_stats|length }}</div>
+            <div class="stat-label">Предметов</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-star"></i> Успеваемость по предметам
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Предмет</th><th>Средний балл</th><th>Прогресс</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for subject, avg in subjects_stats.items() %}
+                            <tr>
+                                <td>{{ subject }}</td>
+                                <td><span class="badge bg-primary">{{ avg }}</span></td>
+                                <td style="width: 150px;">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: {{ (avg / 5 * 100)|round }}%;"></div>
+                                    </div>
+                                    {{ (avg / 5 * 100)|round }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-graduate"></i> Список студентов
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>Студент</th><th>Средний балл</th><th>Оценок</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td><a href="/student/{{ student.id }}">{{ student.full_name }}</a></td>
+                                <td>
+                                    {% set total = student.grades|sum(attribute='grade') %}
+                                    {% set count = student.grades|length %}
+                                    {% if count > 0 %}
+                                        {{ (total / count)|round(2) }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ student.grades|length }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

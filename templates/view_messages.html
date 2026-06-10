@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Чат с {{ other_user.full_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+        <i class="fas fa-comments"></i> 
+        Чат с 
+        {% if other_user.role == 'teacher' %}
+            <i class="fas fa-chalkboard-teacher text-primary"></i>
+        {% else %}
+            <i class="fas fa-user-graduate text-success"></i>
+        {% endif %}
+        {{ other_user.full_name }}
+    </h2>
+    <a href="/messages" class="btn btn-secondary">← Назад</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body p-0">
+        <div class="chat-messages p-3" style="height: 400px; overflow-y: auto; background: #f8f9fa;">
+            {% for msg in messages %}
+                {% if msg.sender_id == current_user.id %}
+                    <div class="d-flex justify-content-end mb-3">
+                        <div class="message-sent">
+                            <div class="message-subject"><strong>{{ msg.subject }}</strong></div>
+                            <div class="message-text">{{ msg.message }}</div>
+                            <div class="message-time text-end"><small>{{ msg.created_at }}</small></div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-start mb-3">
+                        <div class="message-received">
+                            <div class="message-subject"><strong>{{ msg.subject }}</strong></div>
+                            <div class="message-text">{{ msg.message }}</div>
+                            <div class="message-time"><small>{{ msg.created_at }}</small></div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-comment-dots fa-3x mb-3"></i>
+                    <p>Нет сообщений с этим пользователем</p>
+                    <p class="small">Напишите первое сообщение</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <a href="/messages/send/{{ other_user.id }}" class="btn btn-primary w-100">
+            <i class="fas fa-reply"></i> Ответить
+        </a>
+    </div>
+</div>
+
+<style>
+    .message-sent {
+        background: #007bff;
+        color: white;
+        border-radius: 15px 15px 5px 15px;
+        padding: 10px 15px;
+        max-width: 70%;
+    }
+    .message-received {
+        background: white;
+        color: #333;
+        border-radius: 15px 15px 15px 5px;
+        padding: 10px 15px;
+        max-width: 70%;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .message-subject {
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+        opacity: 0.8;
+    }
+    .message-text {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        word-wrap: break-word;
+    }
+    .message-time {
+        font-size: 0.7rem;
+        opacity: 0.7;
+    }
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}

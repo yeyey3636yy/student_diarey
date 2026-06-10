@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Группы{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">
+    <i class="fas fa-users"></i> Учебные группы
+</h2>
+
+<div class="row">
+    {% for group, students in groups_data.items() %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-users"></i>
+                        <strong>{{ group }}</strong>
+                    </div>
+                    <span class="badge bg-primary">{{ students|length }} студентов</span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Студент</th>
+                                <th>Средний балл</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>{{ student.full_name }}</td>
+                                <td>
+                                    {% set total = student.grades|sum(attribute='grade') %}
+                                    {% set count = student.grades|length %}
+                                    {% if count > 0 %}
+                                        <span class="badge bg-secondary">{{ (total / count)|round(2) }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">нет оценок</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/student/{{ student.id }}" class="btn btn-sm btn-primary">Оценки</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="/group/{{ group }}" class="btn btn-outline-primary w-100">
+                    <i class="fas fa-chart-line"></i> Детальная статистика группы
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

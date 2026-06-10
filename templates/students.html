@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Студенты{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-users"></i> Студенты</h2>
+</div>
+
+<div class="row">
+    {% for student in students %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ student.full_name }}</h5>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-users"></i> Группа: {{ student.group }}
+                </p>
+                {% if student.parent_name %}
+                <p class="small text-muted mb-2">
+                    <i class="fas fa-user-friends"></i> Родитель: {{ student.parent_name }}
+                </p>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="/student/{{ student.id }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-star"></i> Оценки
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> Нет добавленных студентов
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
